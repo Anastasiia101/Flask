@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="box">
+                    <h2>{{ question.question }}</h2>
+                    <form action="{{ url_for('main.card', quiz_id=question.quiz_id, question_id=question.id) }}"
+                          method="post" role="form">
+                        {% for a in question.answers %}
+                            {# Генерация radio button #}
+                            {% if question.type.name == "RADIO" %}
+                                <input type="radio" name="answer_radio" value="{{ a.id }}"
+                                       id="{{ question.type.name }}-{{ a.id }}">
+                                <label for="{{ question.type.name }}-{{ a.id }}"><h4>{{ a.answer }}</h4></label>
+                                {# Генерация checkbox #}
+                            {% elif question.type.name == "CHECKBOX" %}
+                                <input type="checkbox" name="answer_check" value="{{ a.id }}"
+                                       id="{{ question.type.name }}-{{ a.id }}">
+                                <label for="{{ question.type.name }}-{{ a.id }}"><h4>{{ a.answer }}</h4></label>
+                                {# Генерация text #}
+                            {% elif question.type.name == "TEXTFIELD" %}
+                                <input type="text" name="answer_string" id="{{ question.type.name }}{{ a.id }}">
+                            {% endif %}
+                            <br>
+                        {% endfor %}
+                        <input type="submit" name="submit" value="Дальше" class="box-button">
+                    </form>
+                    <a href="{{ url_for('main.list') }}" class="forgot text-muted" style="text-decoration: underline">Выход</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
